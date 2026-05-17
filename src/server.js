@@ -12,7 +12,7 @@ const app = express();
 
 // ---------- Configuracion via variables de entorno ----------
 const PORT = process.env.PORT || 3000;
-const MENSAJE_BIENVENIDA = process.env.MENSAJE_BIENVENIDA || 'API de Tareas - DevOps';
+const MENSAJE_BIENVENIDA = process.env.MENSAJE_BIENVENIDA || 'API de Tareas v1.0.2';
 
 // ---------- Middlewares globales ----------
 app.use(cors());                 // Permite llamadas desde el frontend Angular
@@ -64,7 +64,7 @@ app.get('/health', (req, res) => {
 
 // Bienvenida
 app.get('/', (req, res) => {
-  res.json({ mensaje: MENSAJE_BIENVENIDA, version: '1.0.0' });
+  res.json({ mensaje: MENSAJE_BIENVENIDA, version: '1.0.2' });
 });
 
 // Listar todas las tareas
