@@ -1,0 +1,27 @@
+name: CI - Build and push to Amazon ECR
+on:
+  push: { branches: [ "deploy" ] }
+  workflow_dispatch:
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:    ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token:     ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region:            us-east-1
+      - id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ steps.ecr-login.outputs.registry }}/tareas-backend:v1.0.0
+            ${{ steps.ecr-login.outputs.registry }}/tareas-backend:latest
+            ${{ steps.ecr-login.outputs.registry }}/tareas-backend:${{ github.sha }}
